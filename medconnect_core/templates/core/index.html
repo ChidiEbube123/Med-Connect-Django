@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800 font-sans">
+    <header class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Hospital Management System</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="#" class="hover:text-blue-200">Home</a></li>
+                    <li><a href="#" class="hover:text-blue-200">Patients</a></li>
+                    <li><a href="#" class="hover:text-blue-200">Staff</a></li>
+                    <li><a href="#" class="hover:text-blue-200">Appointments</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+{% include "core/nav.html" %}
+    <main class="container mx-auto mt-8 p-4">
+        <div class="flex justify-center items-center h-screen">
+            <img src="{% static 'image/graham-ruttan-b3LF7JHQmms-unsplash.jpg' %}" alt="vv" class="max-w-full max-h-96 rounded-lg shadow-lg">
+        </div>
+      
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-blue-100 p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Patient Management</h2>
+                <p class="mb-4">Efficiently manage patient records, appointments, and treatments.</p>
+                <a href="{% url "patient_management" %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Manage!</a>
+            </div>
+            <div class="bg-blue-100 p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Sessions</h2>
+                <p class="mb-4">Access information about our dedicated medical sessions.</p>
+                <a href="{% url "session_view" %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">View</a>
+            </div>
+            <div class="bg-blue-100 p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Appointment Scheduling</h2>
+                <p class="mb-4">Schedule and manage appointments with ease.</p>
+                <a href="{% url "schedhule_appointment" %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Schedule Now!</a>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-blue-600 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Hospital Management System. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

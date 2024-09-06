@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Management - Hospital Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800 font-sans">
+    <header class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto">
+            <h1 class="text-2xl font-bold">Hospital Management System</h1>
+        </div>
+    </header>
+
+    <main class="container mx-auto mt-8 p-4">
+        <h2 class="text-2xl font-semibold mb-6">Patient Management</h2>
+        <div class="flex justify-end mb-4">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              <a href="{% url "patient_signup" %}">  Add New Patient</a>
+            </button>
+        </div>
+        <form class="max-w-lg mx-auto mb-8" action="{% url "patient_search" %}" method="post">
+            {% csrf_token %}
+            <div class="flex">
+                <input type="text" id="search" name="search" placeholder="Enter patient name or ID" class="flex-grow p-2 border border-gray-300 rounded-l">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r hover:bg-blue-700">Search</button>
+            </div>
+        </form>
+
+        <table class="min-w-full bg-white rounded-lg shadow-md">
+            <thead class="bg-gray-100 border-b">
+                <tr>
+                    <th class="text-left py-3 px-4 font-medium text-gray-600">Patient ID</th>
+                    <th class="text-left py-3 px-4 font-medium text-gray-600">Full Name</th>
+                    <th class="text-left py-3 px-4 font-medium text-gray-600">Date of Birth</th>
+                    <th class="text-left py-3 px-4 font-medium text-gray-600">Gender</th>
+                    <th class="text-left py-3 px-4 font-medium text-gray-600">Phone Number</th>
+                    <th class="text-left py-3 px-4 font-medium text-gray-600">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example Patient Rows -->
+               {% for patient in patients  %}
+
+               {% if patient.gender %}
+               <tr class="border-b">
+                <td class="py-3 px-4">{{patient.user.id}}</td>
+                <td class="py-3 px-4">{{patient.user.first_name}} {{patient.user.last_name}}</td>
+                <td class="py-3 px-4">{{patient.date_of_birth}}</td>
+                <td class="py-3 px-4">{{patient.gender}}</td>
+                <td class="py-3 px-4">{{patient.phone_number}}</td>
+                <td class="py-3 px-4">
+                    <button class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded">
+                        <a href="{% url "patient_view" patient.user.id%}">View</a>
+                    </button>
+                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded">
+                        Edit
+                    </button>
+                    <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+               {% endif %}
+               {% endfor %}
+                <tr class="border-b">
+                    <td class="py-3 px-4">002</td>
+                    <td class="py-3 px-4">Jane Smith</td>
+                    <td class="py-3 px-4">1985-03-22</td>
+                    <td class="py-3 px-4">Female</td>
+                    <td class="py-3 px-4">987-654-3210</td>
+                    <td class="py-3 px-4">
+                        <button class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded">
+                            View
+                        </button>
+                        <button class="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded">
+                            Edit
+                        </button>
+                        <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                <!-- Add more patient rows as needed -->
+            </tbody>
+        </table>
+    </main>
+
+    <footer class="bg-blue-600 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Hospital Management System. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

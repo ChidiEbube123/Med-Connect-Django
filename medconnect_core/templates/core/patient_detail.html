@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Detail</title>
+    <style>
+        :root {
+            --primary-color: #0077be;
+            --secondary-color: #f0f8ff;
+            --text-color: #333;
+            --background-color: #fff;
+            --accent-color: #ff6b6b;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        h1, h2 {
+            color: var(--primary-color);
+        }
+
+        h1 {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        .document-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .document-item {
+            background-color: var(--background-color);
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .document-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .document-name {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #005fa3;
+        }
+
+        .upload-form {
+            margin-top: 20px;
+            background-color: var(--background-color);
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: var(--shadow);
+        }
+
+        .file-input {
+            margin-bottom: 10px;
+        }
+
+        .submit-btn {
+            background-color: var(--accent-color);
+        }
+
+        .submit-btn:hover {
+            background-color: #ff5252;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Patient: {{ patient.name }}</h1>
+        
+        <h2>Documents</h2>
+        <ul class="document-list">
+        {% for document in documents %}
+            <li class="document-item">
+                <span class="document-name">{{ document.file_name }}</span>
+                <a href="{{ document.download_url }}" class="btn" target="_blank">View/Download (S3)</a>
+                <a href="{% url 'serve_file' document.id %}" class="btn">Download (Server)</a>
+            </li>
+        {% empty %}
+            <li>No documents found for this patient.</li>
+        {% endfor %}
+        </ul>
+        
+        <div class="upload-form">
+            <h2>Upload New Document</h2>
+            <form  method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="patient" value="{{ patient.id }}">
+                <div class="file-input">
+                    <input type="file" name="file" required>
+                </div>
+                <button type="submit" class="btn submit-btn">Upload</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

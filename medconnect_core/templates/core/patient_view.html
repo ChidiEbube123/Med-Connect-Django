@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient View - Hospital Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <header class="bg-blue-600 text-white shadow-md">
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold">Hospital Management System</h1>
+        </div>
+    </header>
+    {% include "core/nav.html" %}
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="bg-blue-500 text-white px-6 py-4">
+                <h2 class="text-2xl font-semibold">Patient Information</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-semibold text-blue-600">Personal Details</h3>
+                        <p><span class="font-semibold">Name:</span> {{patient.user.first_name}} {{patient.user.last_name}}</p>
+                        <p><span class="font-semibold">Date of Birth:</span> {{patient.date_of_birth}}</p>
+                        <p><span class="font-semibold">Gender:</span> {{patient.gender}}</p>
+                        <p><span class="font-semibold">Contact:</span> {{patient.user.email}} | {{patient.phone_number}}</p>
+                        <p><span class="font-semibold">Address:</span> {{patient.address}}</p>
+                    </div>
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-semibold text-blue-600">Medical History</h3>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>{{patient.medical_history}}</li>
+                         
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold text-blue-600 mb-4">Recent Appointments</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-blue-100">
+                                    <th class="px-4 py-2 border">Date</th>
+                                    <th class="px-4 py-2 border">Doctor</th>
+                                    <th class="px-4 py-2 border">Purpose</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="px-4 py-2 border">2024-03-15</td>
+                                    <td class="px-4 py-2 border">Dr. Smith</td>
+                                    <td class="px-4 py-2 border">Annual Check-up</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="px-4 py-2 border">2024-02-01</td>
+                                    <td class="px-4 py-2 border">Dr. Johnson</td>
+                                    <td class="px-4 py-2 border">Diabetes Follow-up</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="mt-8 flex justify-end">
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105">
+                     <a href="{% url "patient_edit" patient.user.id%}">   Edit Patient Information</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-blue-600 text-white mt-8">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p>&copy; 2024 Hospital Management System. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

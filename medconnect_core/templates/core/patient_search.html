@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Search Patient - Hospital Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800 font-sans">
+    <header class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto">
+            <h1 class="text-2xl font-bold">Hospital Management System</h1>
+        </div>
+    </header>
+    {% include "core/nav.html" %}
+
+    <main class="container mx-auto mt-8 p-4">
+        <h2 class="text-2xl font-semibold mb-6">Search Patient</h2>
+        <form class="max-w-lg mx-auto mb-8">
+            <div class="flex">
+                <input type="text" id="search" name="search" placeholder="Enter patient name or ID" class="flex-grow p-2 border border-gray-300 rounded-l">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r hover:bg-blue-700">Search</button>
+            </div>
+        </form>
+
+        <div class="overflow-x-auto">
+           {% if searched %}
+           <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-blue-100">
+                    <th class="border border-gray-300 p-2">ID</th>
+                    <th class="border border-gray-300 p-2">Name</th>
+                    <th class="border border-gray-300 p-2">Date of Birth</th>
+                    <th class="border border-gray-300 p-2">Contact</th>
+                    <th class="border border-gray-300 p-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+           {% for patient in searched  %}
+           {% if patient.gender %}
+                <tr>
+                    <td class="border border-gray-300 p-2">{{patient.id     }}</td>
+                    <td class="border border-gray-300 p-2">{{patient.user.first_name}} {{patient.user.last_name}}</td>
+                    <td class="border border-gray-300 p-2">{{patient.date_of_birth}}</td>
+                    <td class="border border-gray-300 p-2">{{patient.user.email}}</td>
+                    <td class="border border-gray-300 p-2">
+                        <a href="{% url "patient_view" patient.id %}" class="text-blue-600 hover:underline">View</a> |
+                        <a href="#" class="text-blue-600 hover:underline">Edit</a>
+                    </td>
+                </tr>
+                <!-- Add more rows as needed -->
+                {% endif %}
+           {% endfor %}
+        </tbody>
+    </table>
+           {% else %}
+           <h2 class="text-2xl font-semibold mb-6">No Patient</h2>
+
+           {% endif %}
+
+        </div>
+    </main>
+
+    <footer class="bg-blue-600 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Hospital Management System. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
