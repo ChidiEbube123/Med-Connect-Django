@@ -21,7 +21,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "Nonso/wsgi.py"
+      "dest": "MedConnectDjango/wsgi.py"
       
     }
   ]
