@@ -9,7 +9,11 @@ from .models import PatientProfile,Appointment,session
 from .forms import PatientSignUpForm,PatientProfileForm, AppointmentForm,SessionForm,PatientSearchForm
 # Create your views here.
 def home(request):
-    return render(request, "core/index.html")
+    if request.user.is_authenticated:
+        return render(request, "core/index.html")
+    else:
+        messages.success(request, "Please login first")
+        return redirect("staff_login")
 
 def patient_signup(request):
     form=PatientSignUpForm()
@@ -230,3 +234,6 @@ def staff_login(request):
             return redirect("staff_login")
 
     return render(request, "core/staff_login.html")
+
+def shift_view(request):
+    return render(request, "core/shift_view.html")

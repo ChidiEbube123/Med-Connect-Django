@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, patient_signup,patient_search,patient_view,appointment_view,schedhule_appointment,patient_profile,staff_login,session_view,session_individual_view,session_create,patient_management,patient_edit,appointment_cancel,appointment_complete,appointment_edit,search_patients
+from .views import home, patient_signup,patient_search,patient_view,appointment_view,schedhule_appointment,patient_profile,staff_login,session_view,session_individual_view,session_create,patient_management,patient_edit,appointment_cancel,appointment_complete,appointment_edit,search_patients,shift_view
 urlpatterns = [
     path("", home, name="home"),
     path("patient_signup/", patient_signup, name="patient_signup"),
@@ -19,5 +19,6 @@ urlpatterns = [
      path("appointment_complete/<int:id>/", appointment_complete, name="appointment_complete"),
       path("appointment_edit/<int:id>/", appointment_edit, name="appointment_edit"),
     path('search-patients/', search_patients, name='search_patients'),
+    path('shift_view/', shift_view, name='shift_view'),
     
 ]

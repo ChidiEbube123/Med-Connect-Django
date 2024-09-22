@@ -47,60 +47,46 @@ from django import forms
 
 class PatientSignUpForm(UserCreationForm):
     username = forms.CharField(
-        label='USer Name',
+        label='Username',
         required=True,
         widget=forms.TextInput(attrs={
-            'class': 'w-full p-2 border border-gray-300 rounded',
+            'class': 'form-field',
         }),
     )
     first_name = forms.CharField(
         label='First Name',
         required=True,
         widget=forms.TextInput(attrs={
-            'class': 'w-full p-2 border border-gray-300 rounded',
+          'class': 'form-field',
         }),
     )
     last_name = forms.CharField(
         label='Other Names',
         required=True,
         widget=forms.TextInput(attrs={
-            'class': 'w-full p-2 border border-gray-300 rounded',
+       'class': 'form-field',
         }),
     )
     email = forms.EmailField(
         label='Email Address',
         required=True,
         widget=forms.EmailInput(attrs={
-            'class': 'w-full p-2 border border-gray-300 rounded',
+         'class': 'form-field',
         }),
     )
-    '''
-    phone = forms.CharField(
-        label='Phone Number',
-        required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'w-full p-2 border border-gray-300 rounded',
-        }),
-    )
-    address = forms.CharField(
-        label='Address',
-        required=True,
-        widget=forms.Textarea(attrs={
-            'class': 'w-full p-2 border border-gray-300 rounded',
-        }),
-    )'''
+    
     password1 = forms.CharField(
         label='Password',
         required=True,
         widget=forms.PasswordInput(attrs={
-            'class': 'w-full p-2 border border-gray-300 rounded',
+        'class': 'form-field',
         }),
     )
     password2 = forms.CharField(
         label='Confirm Password',
         required=True,
         widget=forms.PasswordInput(attrs={
-            'class': 'w-full p-2 border border-gray-300 rounded',
+          'class': 'form-field',
         }),
     )
     usable_password = None

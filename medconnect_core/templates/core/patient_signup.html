@@ -3,29 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Sign Up - Hospital Management System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Patient Sign Up</title>
+    <style>
+        .form-field {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 0.25rem;
+        }
+        body {
+            background-color: white;
+            color: #1F2937;
+            font-family: 'Helvetica', 'Arial', sans-serif;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto; 
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mt-8 {
+            margin-top: 2rem;
+        }
+
+        .p-4 {
+            padding: 1rem;
+        }
+
+        .max-w-lg {
+            max-width: 32rem;
+        }
+
+        .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+
+        .mt-10 {
+            margin-top: 2.5rem;
+        }
+
+        .bg-blue-600 {
+            background-color: #2563EB;
+        }
+
+        .bg-blue-700:hover {
+            background-color: #1D4ED8;
+        }
+
+        .text-white {
+            color: white;
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .rounded {
+            border-radius: 0.25rem;
+        }
+
+        .footer {
+            background-color: #2563EB;
+            color: white;
+            padding: 1rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        button:hover {
+            background-color: #1D4ED8;
+        }
+    </style>
 </head>
-<body class="bg-white text-gray-800 font-sans">
-    <header class="bg-blue-600 text-white p-4">
-        <div class="container mx-auto">
-            <h1 class="text-2xl font-bold">Hospital Management System</h1>
-        </div>
-    </header>
+<body>
     {% include "core/nav.html" %}
 
-    <main class="container mx-auto mt-8 p-4">
-        <h2 class="text-2xl font-semibold mb-6">Patient Sign Up</h2>
-        <form class="max-w-lg mx-auto" method="post" action="{% url "patient_signup" %}">
+    <main class="container mt-8 p-4">
+        <form class="max-w-lg mx-auto" method="post" action="{% url 'patient_signup' %}">
+            <h2 class="text-2xl font-semibold mb-6">Patient Sign Up</h2>
+
             {% csrf_token %}
             {{form}}
-            <button type="submit" class="mt-10 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Sign Up</button>
+            <button type="submit" class="mt-10 bg-blue-600 text-white px-4 py-2 rounded">Sign Up</button>
         </form>
-        <a href="{% url "patient_profile" %}">bb</a>
     </main>
 
-    <footer class="bg-blue-600 text-white p-4 mt-8">
-        <div class="container mx-auto text-center">
+    <footer class="footer">
+        <div class="container">
             <p>&copy; 2024 Hospital Management System. All rights reserved.</p>
         </div>
     </footer>

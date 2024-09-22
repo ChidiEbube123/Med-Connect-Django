@@ -7,17 +7,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans">
-    <header class="bg-blue-600 text-white shadow-md">
-        <div class="container mx-auto px-4 py-6">
-            <h1 class="text-3xl font-bold">Hospital Management System</h1>
-        </div>
-    </header>
+   
     {% include "core/nav.html" %}
 
     <main class="container mx-auto px-4 py-8">
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
             <div class="bg-blue-500 text-white px-6 py-4 flex justify-between items-center">
-                <h2 class="text-2xl font-semibold">Appointment View</h2>
+                <h2 class="text-2xl font-semibold">View Appointments</h2>
                 <div class="space-x-2">
                     <button class="bg-white text-blue-500 hover:bg-blue-100 font-semibold py-2 px-4 rounded transition duration-300 ease-in-out">
                         <a href="{% url "schedhule_appointment" %}" >Schedule New Appointment</a>
