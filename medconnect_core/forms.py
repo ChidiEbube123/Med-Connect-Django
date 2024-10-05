@@ -42,7 +42,7 @@ class PatientSignupForm(UserCreationForm):
 
 from django.contrib.auth.forms import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
-from .models import PatientProfile, Appointment,session
+from .models import PatientProfile, Appointment,session,Shift
 from django import forms
 
 class PatientSignUpForm(UserCreationForm):
@@ -51,6 +51,7 @@ class PatientSignUpForm(UserCreationForm):
         required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-field',
+            "placeholder":"Patient's Username"
         }),
     )
     first_name = forms.CharField(
@@ -58,6 +59,7 @@ class PatientSignUpForm(UserCreationForm):
         required=True,
         widget=forms.TextInput(attrs={
           'class': 'form-field',
+            "placeholder":"Patient's First Name"
         }),
     )
     last_name = forms.CharField(
@@ -65,6 +67,7 @@ class PatientSignUpForm(UserCreationForm):
         required=True,
         widget=forms.TextInput(attrs={
        'class': 'form-field',
+            "placeholder":"Patient's Last Name"
         }),
     )
     email = forms.EmailField(
@@ -72,6 +75,8 @@ class PatientSignUpForm(UserCreationForm):
         required=True,
         widget=forms.EmailInput(attrs={
          'class': 'form-field',
+         "placeholder":"Patient's Email Address"
+
         }),
     )
     
@@ -80,6 +85,8 @@ class PatientSignUpForm(UserCreationForm):
         required=True,
         widget=forms.PasswordInput(attrs={
         'class': 'form-field',
+                    "placeholder":"Example aqw_135"
+
         }),
     )
     password2 = forms.CharField(
@@ -87,6 +94,8 @@ class PatientSignUpForm(UserCreationForm):
         required=True,
         widget=forms.PasswordInput(attrs={
           'class': 'form-field',
+            "placeholder":"Confirm Password"
+
         }),
     )
     usable_password = None
@@ -97,24 +106,120 @@ class PatientSignUpForm(UserCreationForm):
 
 
 class PatientProfileForm(forms.ModelForm):
-    date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'class': 'w-full p-2 border border-gray-300 rounded','placeholder':'2024-09-09'}))
-    gender = forms.ChoiceField(choices=[('Male', 'Male'), ('Female', 'Female')], widget=forms.Select(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    blood_type = forms.ChoiceField(choices=[('AA', 'AA'), ('AS', 'AS'), ('SS', 'SS')], widget=forms.Select(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    phone_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    address = forms.CharField(widget=forms.Textarea(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    emergency_contact_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    emergency_contact_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    allergies = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    medical_history = forms.CharField(widget=forms.Textarea(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    current_medications = forms.CharField(widget=forms.Textarea(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    insurance_provider = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    insurance_policy_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    additional_information = forms.CharField(widget=forms.Textarea(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    next_of_kin = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    marital_status = forms.ChoiceField(choices=[('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced')], widget=forms.Select(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    occupation = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    smoking_status = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
-    alcohol_consumption = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-full p-2 border border-gray-300 rounded'}))
+    date_of_birth = forms.DateField(
+   
+    widget=forms.DateInput(attrs={'class': 'form-field', 'placeholder': 'YYYY-MM-DD'})
+)
+
+    gender = forms.ChoiceField(
+        choices=[('Male', 'Male'), ('Female', 'Female')],
+        widget=forms.Select(attrs={'class': 'form-field'})
+    )
+
+    blood_type = forms.ChoiceField(
+        choices=[('AA', 'AA'), ('AS', 'AS'), ('SS', 'SS')],
+        widget=forms.Select(attrs={'class': 'form-field'})
+    )
+
+    phone_number = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Patient's Phone Number"})
+    )
+
+    address = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Patient's Address"})
+    )
+
+    emergency_contact_name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Emergency Contact Name"})
+    )
+
+    emergency_contact_number = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Emergency Contact Number"})
+    )
+
+    allergies = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-field', "placeholder": "Known Allergies"})
+    )
+
+    medical_history = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-field', "placeholder": "Patient's Medical History"})
+    )
+
+    current_medications = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-field', "placeholder": "Current Medications"})
+    )
+
+    insurance_provider = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Insurance Provider"})
+    )
+
+    insurance_policy_number = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Insurance Policy Number"})
+    )
+
+    additional_information = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-field', "placeholder": "Additional Information"})
+    )
+
+    next_of_kin = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Next of Kin"})
+    )
+
+    marital_status = forms.ChoiceField(
+        choices=[('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced')],
+        widget=forms.Select(attrs={'class': 'form-field'})
+    )
+
+    occupation = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Patient's Occupation"})
+    )
+
+    smoking_status = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Smoking Status"})
+    )
+
+    alcohol_consumption = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Alcohol Consumption"})
+    )
+    class Meta:
+            model=PatientProfile
+            fields = (
+        'date_of_birth',
+        'gender',
+        'blood_type',
+        'phone_number',
+        'address',
+        'emergency_contact_name',
+        'emergency_contact_number',
+        'allergies',
+        'medical_history',
+        'current_medications',
+        'insurance_provider',
+        'insurance_policy_number',
+        'additional_information',
+        'next_of_kin',
+        'marital_status',
+        'occupation',
+        'smoking_status',
+        'alcohol_consumption'
+)
+class StaffProfileForm(forms.ModelForm):
+    date_of_birth = forms.DateField(required=False,widget=forms.DateInput(attrs={ 'class': 'form-field','placeholder':'2024-09-09'}))
+    gender = forms.ChoiceField(required=False,choices=[('Male', 'Male'), ('Female', 'Female')], widget=forms.Select(attrs={ 'class': 'form-field'}))
+    blood_type = forms.ChoiceField(required=False,choices=[('AA', 'AA'), ('AS', 'AS'), ('SS', 'SS')], widget=forms.Select(attrs={ 'class': 'form-field'}))
+    phone_number = forms.CharField(required=False,widget=forms.TextInput(attrs={ 'class': 'form-field'}))
+    address = forms.CharField(required=False,widget=forms.Textarea(attrs={ 'class': 'form-field'}))
+  
+    additional_information = forms.CharField(required=False,widget=forms.Textarea(attrs={ 'class': 'form-field'}))
+    #is_staff=forms.BooleanField(required=False,widget=forms.CheckboxInput( attrs={'checked':'checked'}))
+    status=forms.ChoiceField(required=False,label="Status", choices=[  
+          ('Doctor', "Doctor"),
+        ('Nurse', "Nurse"),
+             ] , widget=forms.Select(attrs={
+            'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+        }))
+    
     class Meta:
         model=PatientProfile
         fields = (
@@ -123,19 +228,10 @@ class PatientProfileForm(forms.ModelForm):
     'blood_type',
     'phone_number',
     'address',
-    'emergency_contact_name',
-    'emergency_contact_number',
-    'allergies',
-    'medical_history',
-    'current_medications',
-    'insurance_provider',
-    'insurance_policy_number',
-    'additional_information',
-    'next_of_kin',
-    'marital_status',
-    'occupation',
-    'smoking_status',
-    'alcohol_consumption'
+    'additional_information', 
+    'is_staff',
+    'status',
+
 )
 class AppointmentForm(forms.ModelForm):
     purpose = forms.CharField(
@@ -161,18 +257,7 @@ class AppointmentForm(forms.ModelForm):
             'type': 'time'
         })
     )
-    doctor = forms.ChoiceField(
-        label="Select Doctor",
-        choices=[
-            ('', 'Choose a doctor'),
-            ('dr-smith', 'Dr. Smith - Cardiologist'),
-            ('dr-johnson', 'Dr. Johnson - Dermatologist'),
-            ('dr-williams', 'Dr. Williams - Neurologist'),
-        ],
-        widget=forms.Select(attrs={
-            'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-        })
-    )
+
     status = forms.ChoiceField(
         label="Status",
         choices=[
@@ -189,13 +274,24 @@ class AppointmentForm(forms.ModelForm):
         fields=('patient','purpose','date', 'time', 'doctor','status')
         
 
-
+'''   doctor = forms.ChoiceField(
+        label="Select Doctor",
+        choices=[
+            ('', 'Choose a doctor'),
+            ('dr-smith', 'Dr. Smith - Cardiologist'),
+            ('dr-johnson', 'Dr. Johnson - Dermatologist'),
+            ('dr-williams', 'Dr. Williams - Neurologist'),
+        ],
+        widget=forms.Select(attrs={
+            'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+        })
+    )'''
 class PatientSearchForm(forms.Form):
     patient_search = forms.CharField(
         max_length=100,
         required=False,
         widget=forms.TextInput(attrs={
-            'class': 'w-full p-2 border border-gray-300 rounded',
+             'class': 'form-field',
             'placeholder': 'Search by name or ID'
         })
     )
@@ -203,14 +299,42 @@ class PatientSearchForm(forms.Form):
 class SessionForm(forms.ModelForm):
     class Meta:
         model = session
-        fields = ['medication', 'dosage', 'instructions','doctor']#
+        fields = ['medication', 'dosage', 'instructions','patient','doctor']#
         widgets = {
             'medication': forms.Textarea(attrs={
                 'class': 'w-full p-2 border border-gray-300 rounded h-32 resize-none',
                 'rows': 4
             }),
             'dosage': forms.TextInput(attrs={
-                'class': 'w-full p-2 border border-gray-300 rounded'
+                 'class': 'form-field'
+            }),
+            'instructions': forms.Textarea(attrs={
+                'class': 'w-full p-2 border border-gray-300 rounded h-32 resize-none',
+                'rows': 4
+            }),
+        }
+
+class ShiftForm(forms.ModelForm):
+   
+    
+    date = forms.DateField(
+        label="date",
+        widget=forms.DateInput(attrs={
+            'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+            'type': 'date'
+        })
+    )
+
+    class Meta:
+        model = Shift
+        fields = ['staff', 'date', 'time_slot']#
+        widgets = {
+            'medication': forms.Textarea(attrs={
+                'class': 'w-full p-2 border border-gray-300 rounded h-32 resize-none',
+                'rows': 4
+            }),
+            'dosage': forms.TextInput(attrs={
+                 'class': 'form-field'
             }),
             'instructions': forms.Textarea(attrs={
                 'class': 'w-full p-2 border border-gray-300 rounded h-32 resize-none',

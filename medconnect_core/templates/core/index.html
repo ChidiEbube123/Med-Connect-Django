@@ -5,37 +5,166 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hospital Management System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: white;
+            color: #2d3748;
+            font-family: sans-serif;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 1rem;
+        }
+        
+        main {
+            margin-top: 2rem;
+            padding: 1rem;
+        }
+        
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            max-height: 24rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .grid-section {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(1, 1fr);
+        }
+        
+        @media (min-width: 768px) {
+            .grid-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .grid-section {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .card {
+            background-color: #e6f2ff;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .card p {
+            margin-bottom: 1rem;
+        }
+        
+        .button {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .button:hover {
+            background-color: #1d4ed8;
+        }
+        
+        footer {
+            background-color: #2563eb;
+            color: white;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        
+        footer .container {
+            text-align: center;
+        }
+        .message {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.25rem;
+        }
+        
+        .message.success {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+
+        .message.info {
+            background-color: #cff4fc;
+            color: #055160;
+        }
+    </style>
 </head>
-<body class="bg-white text-gray-800 font-sans">
-    
-{% include "core/nav.html" %}
-    <main class="container mx-auto mt-8 p-4">
-        <div class="flex justify-center items-center h-screen">
-            <img src="{% static 'image/graham-ruttan-b3LF7JHQmms-unsplash.jpg' %}" alt="vv" class="max-w-full max-h-96 rounded-lg shadow-lg">
+<body>
+    {% include "core/nav.html" %}
+    <main class="container">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+        <div class="image-container">
+            <img src="{% static 'image/graham-ruttan-b3LF7JHQmms-unsplash.jpg' %}" alt="vv">
         </div>
-      
-        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="bg-blue-100 p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4">Patient Management</h2>
-                <p class="mb-4">Efficiently manage patient records, appointments, and treatments.</p>
-                <a href="{% url "patient_management" %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Manage!</a>
+        
+        <section class="grid-section">
+            <div class="card">
+                <h2>Patient Management</h2>
+                <p>Efficiently manage patient records, appointments, and treatments.</p>
+                <a href="{% url "patient_management" %}" class="button">Manage!</a>
             </div>
-            <div class="bg-blue-100 p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4">Sessions</h2>
-                <p class="mb-4">Access information about our dedicated medical sessions.</p>
-                <a href="{% url "session_view" %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">View</a>
+            <div class="card">
+                <h2>Sessions</h2>
+                <p>Access information about our dedicated medical sessions.</p>
+                <a href="{% url "session_view" %}" class="button">View</a>
             </div>
-            <div class="bg-blue-100 p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4">Appointment Scheduling</h2>
-                <p class="mb-4">Schedule and manage appointments with ease.</p>
-                <a href="{% url "schedhule_appointment" %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Schedule Now!</a>
+            <div class="card">
+                <h2>Appointments</h2>
+                <p>Schedule and manage appointments with ease.</p>
+                <a href="{% url "schedhule_appointment" %}" class="button">Schedule Now!</a>
             </div>
+              <div class="card">
+            <h2>Staff Management</h2>
+            <p>Schedule and manage appointments with ease.</p>
+            <a href="{% url "staff_management" %}" class="button">Manage</a>
+        </div>
+        <div class="card">
+            <h2>Shifts</h2>
+            <p>Schedule and manage shifts for staff with ease.</p>
+            <a href="{% url "shift_view" %}" class="button">Manage</a>
+        </div>
         </section>
+      
     </main>
-    <footer class="bg-blue-600 text-white p-4 mt-8">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 Hospital Management System. All rights reserved.</p>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MedConnect. All rights reserved.</p>
         </div>
     </footer>
 </body>

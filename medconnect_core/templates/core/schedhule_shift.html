@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Appointment</title>
+    <title>Schedule Shift</title>
     <style>
         :root {
             --color-primary: #2c3e50;
@@ -91,11 +91,11 @@
 </head>
 
 <body>
-    {% include "core/nav.html" %}
     
     <div class="container">
-        <h1>Create Appointment</h1>
-        <form id="appointmentForm" method="post" action="{% url "schedhule_appointment" %}">
+        
+        <h1>Schedule shift</h1>
+        <form id="appointmentForm" method="post" action="{% url "schedhule_shift" %}">
             {% csrf_token %}
             {% for field in form %}
             <div class="form-group">
@@ -108,7 +108,7 @@
             
             <div class="button-container">
                 <button type="submit">
-                    Book Appointment
+                   Create Shift
                 </button>
             </div>
         </form>

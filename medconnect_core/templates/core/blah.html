@@ -3,22 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Sign Up </title>
+    <title>Patient Sign Up - Hospital Management System</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-white text-gray-800 font-sans">
-    
+    <header class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto">
+            <h1 class="text-2xl font-bold">Hospital Management System</h1>
+        </div>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            secondary: '#2c3e50',
+                            secondary: '#3498db',
+                            accent: '#e74c3c',
+                            background: '#ecf0f1',
+                        }
+                    }
+                }
+            }
+        </script>
+    </header>
     {% include "core/nav.html" %}
 
     <main class="container mx-auto mt-8 p-4">
-        <form class="max-w-lg mx-auto" method="post" action="{% url "patient_signup" %}">
-            <h2 class="text-2xl font-semibold mb-6">Patient Sign Up</h2>
-
-            {% csrf_token %}
-            {{form}}
-            <button type="submit" class="mt-10 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Sign Up</button>
-        </form>
       
+        <form class="max-w-lg mx-auto" action="{% url "patient_profile" %}" method="post">
+            <h2 class="text-2xl font-semibold mt-40 mb-6 text-secondary">Patient Records </h2>
+          {% csrf_token %}
+          {{form}}
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Sign Up</button>
+        </form>
     </main>
 
     <footer class="bg-blue-600 text-white p-4 mt-8">

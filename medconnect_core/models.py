@@ -23,10 +23,17 @@ class PatientProfile(models.Model):
     occupation = models.CharField(max_length=100, blank=True, null=True)
     smoking_status = models.CharField(max_length=100, blank=True, null=True)
     alcohol_consumption = models.CharField(max_length=100, blank=True, null=True)
-    status= models.CharField(max_length=100, default="patient")
+    is_staff=models.BooleanField(null=True,default=False)
+    status= models.CharField(null=True, max_length=100,choices=[
+        ('Patient', "Patient")  ,
+          ('Doctor', "Doctor"),
+        ('Nurse', "Nurse"),
+             
+    ], blank=True)
+    
 
     def __str__(self):
-        return f"{self.emergency_contact_name} ({self.phone_number})"
+        return f"{self.user.first_name} {self.user.last_name}"
 def create_profile(sender, instance, created, **kwargs):
     if created:
         user_profile=PatientProfile(user=instance)
@@ -34,11 +41,11 @@ def create_profile(sender, instance, created, **kwargs):
 #automte it
 post_save.connect(create_profile, sender=User)
 class Appointment(models.Model):
-        patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE, null=True)
+        patient = models.ForeignKey(PatientProfile,limit_choices_to={'is_staff':True}, on_delete=models.CASCADE, null=True)
         date=models.DateField(default=datetime.datetime.today)
         time = models.TimeField(default=datetime.datetime.today)
         purpose = models.TextField(max_length=100, null=True)
-        doctor=models.CharField(max_length=100 , null=True)
+        doctor=models.ForeignKey(PatientProfile,related_name="doctor" ,on_delete=models.CASCADE,limit_choices_to={'status':"Doctor"}, null=True)
         status = models.CharField(max_length=20, choices=[
             ('SCHEDULED', 'Scheduled'),
             ('CANCELLED', 'Cancelled'),
@@ -48,11 +55,34 @@ class Appointment(models.Model):
 
         def __str__(self):
             return self.purpose
+class Time_Slot(models.Model):
+     start_time = models.TimeField(default=datetime.datetime.today)
+     end_time = models.TimeField(default=datetime.datetime.today)
+     def __str__(self):
+            return f'Slot {self.start_time} - {self.end_time} '
+class Shift(models.Model):
+        
+        staff = models.ManyToManyField(PatientProfile,limit_choices_to={'is_staff':True}, null=True)
+        date=models.DateField(default=datetime.datetime.today)
+        time_slot = models.ForeignKey(Time_Slot,on_delete=models.CASCADE,null=True)
+
+     #   doctor=models.CharField(max_length=100 , null=True)
+        status = models.CharField(max_length=20, choices=[
+            ('SCHEDULED', 'Scheduled'),
+            ('CANCELLED', 'Cancelled'),
+            ('COMPLETED', 'Completed'),
+             ('ONGOING', 'Ongoing'),
+
+        ], default='SCHEDULED')
+        created_at = models.DateTimeField(auto_now_add=True)
+
+        def __str__(self):
+            return f'{self.date} {self.time.start_time} - {self.time.end_time}'
 
 
 class session(models.Model):
     doctor = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
-    patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE)
+    patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE, null=True, blank=True)
     medication = models.TextField()
     dosage = models.CharField(max_length=100)
     instructions = models.TextField()

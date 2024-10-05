@@ -1,124 +1,228 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor's Notes and Prescriptions</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#2c3e50',
-                        secondary: '#3498db',
-                        accent: '#e74c3c',
-                        background: '#ecf0f1',
-                    }
-                }
+    <style>
+        /* Font Awesome CSS (minimal set for used icons) */
+        @font-face {
+            font-family: 'FontAwesome';
+            src: url('{% static "fonts/fontawesome-webfont.woff2" %}') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        .fas {
+            font-family: 'FontAwesome';
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            display: inline-block;
+            font-style: normal;
+            font-variant: normal;
+            text-rendering: auto;
+            line-height: 1;
+        }
+        .fa-prescription-bottle:before {
+            content: "\f485";
+        }
+        /* Original CSS */
+        :root {
+            --color-primary: #2c3e50;
+            --color-secondary: #3498db;
+            --color-accent: #e74c3c;
+            --color-background: #ecf0f1;
+        }
+        body {
+            background-color: var(--color-background);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .thing {
+            margin-bottom: 100px;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 1rem;
+        }
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        aside {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+        }
+        h2 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.25rem;
+        }
+        button {
+            background-color: var(--color-secondary);
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button i {
+            margin-right: 0.5rem;
+        }
+        .hidden {
+            display: none;
+        }
+        footer {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .patient-result {
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        .patient-result:hover {
+            background-color: #f7fafc;
+        }
+        @media (min-width: 768px) {
+            main {
+                flex-direction: row;
+            }
+            aside {
+                width: 75%;
             }
         }
-    </script>
-    <style>
-.thing{
-    margin-bottom:100px;
-}
-
     </style>
 </head>
-<body class="bg-background min-h-screen flex flex-col">
-    
-    <div class="thing">{% include "core/nav.html" %}
-    </div>
-    <main class="flex-grow container mx-auto p-4 flex flex-col md:flex-row gap-4">
-        <aside class="md:w-3/4 bg-white rounded-lg shadow-md p-4">
-            <h2 class="text-xl font-bold text-primary mb-4">Write Prescription</h2>
+<body>
+    <div class="thing">{% include "core/nav.html" %}</div>
+    <main class="container">
+        <aside>
+            <h2>Write Prescription</h2>
             <form method="post" id="prescriptionForm">
                 {% csrf_token %}
-                <div class="mb-4">
-                    <label for="{{ patient_form.patient_search.id_for_label }}" class="block mb-2 text-gray-700">Search Patient</label>
+                <div>
+                    <label for="{{ patient_form.patient_search.id_for_label }}">Search Patient</label>
                     {{ patient_form.patient_search }}
                 </div>
-                <div id="patientSearchResults" class="mb-4"></div>
+                <div id="patientSearchResults"></div>
                 {{ patient_form.selected_patient }}
-                <div id="selectedPatientInfo" class="mb-4 hidden">
+                <div id="selectedPatientInfo" class="hidden">
                     <strong>Selected Patient:</strong> <span id="selectedPatientName"></span>
                 </div>
-                <div class="mb-4">
-                    <label for="{{ session_form.medication.id_for_label }}" class="block mb-2 text-gray-700">Medications</label>
+                <div>
+                    <label for="{{ session_form.doctor.id_for_label }}">Doctor</label>
+                    {{ session_form.doctor}}
+                </div>
+                <div>
+                    <label for="{{ session_form.medication.id_for_label }}">Medications</label>
                     {{ session_form.medication }}
                 </div>
-                <div class="mb-4">
-                    <label for="{{ session_form.dosage.id_for_label }}" class="block mb-2 text-gray-700">Dosage</label>
+                <div>
+                    <label for="{{ session_form.dosage.id_for_label }}">Dosage</label>
                     {{ session_form.dosage }}
                 </div>
-                <div class="mb-4">
-                    <label for="{{ session_form.instructions.id_for_label }}" class="block mb-2 text-gray-700">Instructions</label>
+                <div>
+                    <label for="{{ session_form.instructions.id_for_label }}">Instructions</label>
                     {{ session_form.instructions }}
                 </div>
-                <button type="submit" class="bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
-                    <i class="fas fa-prescription-bottle mr-2"></i>Submit Prescription
+                <button type="submit">
+                    <i class="fas fa-prescription-bottle"></i>Submit Prescription
                 </button>
             </form>
         </aside>
     </main>
-    
-   
-
-    <footer class="bg-primary text-white p-4 mt-4">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 TeleMed. All rights reserved.</p>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MedConnect.. All rights reserved.</p>
         </div>
     </footer>
-</body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        var searchTimeout;
-        $('#id_patient_search').on('input', function() {
-            clearTimeout(searchTimeout);
-            var query = $(this).val();
-            searchTimeout = setTimeout(function() {
-                if (query.length > 0    ) {
-                    $.ajax({
-                        url: '{% url "search_patients" %}',
-                        data: {
-                            'q': query
-                        },
-                        success: function(data) {
-                            var results = $('#patientSearchResults');
-                            results.empty();
-                            if (data.length > 0) {
-                                $.each(data, function(index, item) {
-                                    results.append(
-                                        $('<div>')
-                                            .addClass('patient-result cursor-pointer p-2 hover:bg-gray-100')
-                                            .text(item.name)
-                                            .data('patient-id', item.id)
-                                            .data('patient-name', item.name)
-                                    );
-                                });
-                            } else {
-                                results.append($('<div>').text('No patients found'));
-                            }
-                        }
-                    });
-                } else {
-                    $('#patientSearchResults').empty();
-                }
-            }, 300);
-        });
 
-        $(document).on('click', '.patient-result', function() {
-            var patientId = $(this).data('patient-id');
-            var patientName = $(this).data('patient-name');
-            $('#id_selected_patient').val(patientId);
-            $('#selectedPatientName').text(patientName);
-            $('#selectedPatientInfo').removeClass('hidden');
-            $('#patientSearchResults').empty();
-            $('#id_patient_search').val('');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var searchTimeout;
+            var patientSearch = document.getElementById('{{ patient_form.patient_search.id_for_label }}');
+            var patientSearchResults = document.getElementById('patientSearchResults');
+            var selectedPatient = document.getElementById('{{ patient_form.selected_patient.id_for_label }}');
+            var selectedPatientInfo = document.getElementById('selectedPatientInfo');
+            var selectedPatientName = document.getElementById('selectedPatientName');
+
+            patientSearch.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                var query = this.value;
+                searchTimeout = setTimeout(function() {
+                    if (query.length > 0) {
+                        fetch('{% url "search_patients" %}?q=' + encodeURIComponent(query))
+                            .then(response => response.json())
+                            .then(data => {
+                                patientSearchResults.innerHTML = '';
+                                if (data.length > 0) {
+                                    data.forEach(function(item) {
+                                        var div = document.createElement('div');
+                                        div.classList.add('patient-result');
+                                        div.textContent = item.name;
+                                        div.dataset.patientId = item.id;
+                                        div.dataset.patientName = item.name;
+                                        patientSearchResults.appendChild(div);
+                                    });
+                                } else {
+                                    patientSearchResults.innerHTML = '<div>No patients found</div>';
+                                }
+                            });
+                    } else {
+                        patientSearchResults.innerHTML = '';
+                    }
+                }, 300);
+            });
+
+            patientSearchResults.addEventListener('click', function(e) {
+                if (e.target.classList.contains('patient-result')) {
+                    var patientId = e.target.dataset.patientId;
+                    var patientName = e.target.dataset.patientName;
+                    selectedPatient.value = patientId;
+                    selectedPatientName.textContent = patientName;
+                    selectedPatientInfo.classList.remove('hidden');
+                    patientSearchResults.innerHTML = '';
+                    patientSearch.value = '';
+                }
+            });
         });
-    });
-</script>
+    </script>
+</body>
 </html>

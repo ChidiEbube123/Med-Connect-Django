@@ -84,26 +84,6 @@
         .rounded {
             border-radius: 0.25rem;
         }
-        .message {
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 0.25rem;
-        }
-        
-        .message.success {
-            background-color: #d1e7dd;
-            color: #0f5132;
-        }
-
-        .message.error {
-            background-color: #f8d7da;
-            color: #842029;
-        }
-
-        .message.info {
-            background-color: #cff4fc;
-            color: #055160;
-        }
 
         .footer {
             background-color: #2563EB;
@@ -122,15 +102,8 @@
     {% include "core/nav.html" %}
 
     <main class="container mt-8 p-4">
-        {% if messages %}
-        {% for message in messages %}
-            <div class="message {{ message.tags }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-        <form class="max-w-lg mx-auto" method="post" action="{% url 'patient_signup' %}">
-            <h2 class="text-2xl font-semibold mb-6">Patient Sign Up</h2>
+        <form class="max-w-lg mx-auto" method="post" action="{% url 'staff_signup' %}">
+            <h2 class="text-2xl font-semibold mb-6">Staff Sign Up</h2>
 
             {% csrf_token %}
             {{form}}
@@ -140,7 +113,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2024 Hospital Management System. All rights reserved.</p>
+            <p>&copy; 2024 MedConnect. All rights reserved.</p>
         </div>
     </footer>
 </body>

@@ -4,32 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Login - Hospital Management System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            margin-top:30px;
+        }
+        main {
+            margin-top: 2rem;
+        }
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        form {
+            max-width: 20rem;
+            margin: 0 auto;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.25rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+        }
+        button {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1d4ed8;
+        }
+        .spacer {
+            margin-bottom: 10rem;
+        }
+        footer {
+            background-color: #2563eb;
+            color: white;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        footer .container {
+            text-align: center;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans">
-   
+<body>
     {% include "core/nav.html" %}
-
-    <main class="container mx-auto mt-8 p-4">
-        <h2 class="text-2xl font-semibold mb-6 text-center">Staff Login</h2>
-        <form class="max-w-sm mx-auto bg-white p-6 rounded shadow-lg" method="post" action="{% url "staff_login" %}">
+    
+    <main class="container">
+        <h2>Staff Login</h2>
+        <form method="post" action="{% url "staff_login" %}">
             {% csrf_token %}
-            <div class="mb-4">
-                <label for="username" class="block mb-2 text-gray-700">Username</label>
-                <input type="text" id="username" name="username" required class="w-full p-2 border border-gray-300 rounded">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
             </div>
-            <div class="mb-4">
-                <label for="password" class="block mb-2 text-gray-700">Password</label>
-                <input type="password" id="password" name="password" required class="w-full p-2 border border-gray-300 rounded">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
             </div>
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Log In</button>
+            <button type="submit">Log In</button>
         </form>
     </main>
-    <div class="mb-40">
-      
-    </div>
-    <footer class="bg-blue-600 text-white p-4 mt-8">
-        <div class="container mx-auto text-center">
+    
+    <div class="spacer"></div>
+    
+    <footer>
+        <div class="container">
             <p>&copy; 2024 Hospital Management System. All rights reserved.</p>
         </div>
     </footer>
