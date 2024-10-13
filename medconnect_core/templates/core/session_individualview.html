@@ -22,41 +22,34 @@
     </script>
 </head>
 <body class="bg-background min-h-screen flex flex-col">
-    <header class="bg-secondary text-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">TeleMed Consultation</h1>
-            <a href="previous-sessions.html" class="bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Back to Sessions
-            </a>
-        </div>
-    </header>
+    {% include "core/nav.html" %}
 
     <main class="flex-grow container mx-auto p-4">
         <h2 class="text-2xl font-bold text-secondary mb-6">Session Details</h2>
         <div class="bg-white rounded-lg shadow-md p-4">
             <h3 class="text-xl font-semibold text-secondary mb-4">Session Overview</h3>
-            <p class="mb-2"><strong>Doctor:</strong> Dr. Emily Johnson</p>
-            <p class="mb-2"><strong>Patient:</strong> John Doe</p>
-            <p class="mb-2"><strong>Date:</strong> May 15, 2024</p>
-            <p class="mb-2"><strong>Time:</strong> 10:00 AM - 10:30 AM</p>
+            <p class="mb-2"><strong>Doctor:</strong> Dr. {{session.doctor}}</p>
+            <p class="mb-2"><strong>Patient:</strong> {{session.patient}}</p>
+            <p class="mb-2"><strong>Date:</strong> {{session.date}}</p>
+            <p class="mb-2"><strong>Time:</strong> {{session.time}}</p>
 
             <h3 class="text-xl font-semibold text-secondary mt-6 mb-4">Notes</h3>
             <p class="border border-gray-300 p-4 rounded-lg">
-                John reported having frequent headaches and dizziness. Recommended further tests and prescribed medication.
+                {{session.notes}}
             </p>
 
             <h3 class="text-xl font-semibold text-secondary mt-6 mb-4">Prescription</h3>
             <div class="border border-gray-300 p-4 rounded-lg">
-                <p class="mb-2"><strong>Medication:</strong> Acetaminophen</p>
-                <p class="mb-2"><strong>Dosage:</strong> 500 mg every 6 hours</p>
-                <p><strong>Instructions:</strong> Take with food to avoid stomach upset.</p>
+                <p class="mb-2"><strong>Medication:</strong> {{session.medication}},</p>
+                <p class="mb-2"><strong>Dosage:</strong> {{session.dosage}},</p>
+                <p><strong>Instructions:</strong> {{session.instructions}},</p>
             </div>
         </div>
     </main>
 
     <footer class="bg-secondary text-white p-4 mt-4">
         <div class="container mx-auto text-center">
-            <p>&copy; 2024 TeleMed. All rights reserved.</p>
+            <p>&copy; 2024 MedConnect. All rights reserved.</p>
         </div>
     </footer>
 </body>

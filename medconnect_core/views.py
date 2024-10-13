@@ -2,15 +2,32 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.db.models import Q #for multiple queries
 from django.http import JsonResponse
+from django.utils import timezone
+
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from .models import PatientProfile,Appointment,session, Shift
-from .forms import PatientSignUpForm,PatientProfileForm, AppointmentForm,SessionForm,PatientSearchForm,ShiftForm,StaffProfileForm
+from .forms import PatientSignUpForm,PatientProfileForm, AppointmentForm,SessionForm,PatientSearchForm,ShiftForm,StaffProfileForm,StaffSignUpForm
 # Create your views here.
 def home(request):
     if request.user.is_authenticated:
-        return render(request, "core/index.html")
+        profile = PatientProfile.objects.get(user__id=request.user.id)
+        if profile.status!="Admin":
+            return render(request, "core/index.html")
+        else:
+             return redirect("admin_home")
+    else:
+        messages.success(request, "Please login first")
+        return redirect("staff_login")
+def admin_home(request):
+    if request.user.is_authenticated:
+        profile = PatientProfile.objects.get(user__id=request.user.id)
+        if profile.status=="Admin":
+             
+            return render(request, "core/admin_index.html")
+        else:
+             return redirect("home")
     else:
         messages.success(request, "Please login first")
         return redirect("staff_login")
@@ -45,9 +62,9 @@ def patient_signup(request):
         return redirect("staff_login")
 def staff_signup(request):
     if request.user.is_authenticated:
-        form=PatientSignUpForm()
+        form=StaffSignUpForm()
         if request.method=="POST":
-            form=PatientSignUpForm(request.POST)
+            form=StaffSignUpForm(request.POST)
             if form.is_valid():
                 form.save()
                 username=form.cleaned_data["username"]
@@ -61,9 +78,11 @@ def staff_signup(request):
                 use=User.objects.get(username=username)
                 request.session['user_id'] = use.id
                 return redirect("staff_profile", )
+            else:
+                messages.error(request, form.errors)
+                return redirect("patient_signup")
             return redirect("staff_signup")
         else:
-            print("dd")
             return render(request, "core/staff_signup.html", {"form":form})
     else:
         messages.success(request, "Please login first")
@@ -95,8 +114,10 @@ def staff_profile(request):
         
         if request.method == 'POST':
             if form.is_valid():
+                form.is_staff=True
                 form.save()
                 messages.success(request, "Staff successfully registered")
+                print("dope")
                 return redirect("home")
             else:
                 messages.error(request, "Failed to update profile. Please correct the errors below.")
@@ -111,25 +132,91 @@ def upload_patient(request):
 
 
 def patient_management(request):
-    if request.user.is_authenticated:
-        patients=PatientProfile.objects.filter(is_staff=False)
-        return render(request, "core/patient_management.html", {"patients":patients})
-    else:
-        messages.success(request, "Please login first")
+    if not request.user.is_authenticated:
+        messages.error(request, "Please login first")
         return redirect("staff_login")
+    profile = PatientProfile.objects.get(user__id=request.user.id)
+    if profile.status=="Doctor":
+        return redirect("doctor_patient_management")
+
+    patients = PatientProfile.objects.filter(is_staff=False)
+    
+    if request.method == "POST":
+        search_query = request.POST.get('search', '')
+        if search_query:
+            patients = patients.filter(
+                Q(user__id__icontains=search_query) |
+                Q(user__first_name__icontains=search_query) |
+                Q(user__last_name__icontains=search_query)
+            )
+    p=Paginator(patients,6)
+    page_number=request.GET.get('page')
+    try:
+        patients=p.get_page(page_number)
+    except PageNotAnInteger:
+        patients=p.page(1)#if pnumber isnt int assign to firstpaage
+    except EmptyPage:
+        patients=p.page(p.num_pages)
+    
+    return render(request, "core/patient_management.html", {"patients": patients})
+    
+def admin_patient_management(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "Please login first")
+        return redirect("staff_login")
+    
+    patients = PatientProfile.objects.filter(is_staff=False)
+    
+    if request.method == "POST":
+        search_query = request.POST.get('search', '')
+        if search_query:
+            patients = patients.filter(
+                Q(user__id__icontains=search_query) |
+                Q(user__first_name__icontains=search_query) |
+                Q(user__last_name__icontains=search_query)
+            )
+    p=Paginator(patients,6)
+    page_number=request.GET.get('page')
+    try:
+        patients=p.get_page(page_number)
+    except PageNotAnInteger:
+        patients=p.page(1)#if pnumber isnt int assign to firstpaage
+    except EmptyPage:
+        patients=p.page(p.num_pages)
+    
+    return render(request, "core/patient_management.html", {"patients": patients})
     
 
 def staff_management(request):
     if request.user.is_authenticated:
-        patients=PatientProfile.objects.filter(is_staff=True)
-        return render(request, "core/staff_management.html", {"patients":patients})
+        staff=PatientProfile.objects.filter(is_staff=True)
+        if request.method == "POST":
+            search_query = request.POST.get('search', '')
+            if search_query:
+                staff = staff.filter(
+                    Q(user__id__icontains=search_query) |
+                    Q(user__first_name__icontains=search_query) |
+                    Q(user__last_name__icontains=search_query)
+                )
+        p=Paginator(staff,6)
+        page_number=request.GET.get('page')
+        try:
+            staff=p.get_page(page_number)
+        except PageNotAnInteger:
+            staff=p.page(1)#if pnumber isnt int assign to firstpaage
+        except EmptyPage:
+            staff=p.page(p.num_pages)
+        return render(request, "core/staff_management.html", {"staff":staff
+                                                              })
     else:
         messages.success(request, "Please login first")
         return redirect("staff_login")
 
-def session_individual_view (request):
+def session_individual_view (request,id):
     if request.user.is_authenticated:
-        return render(request, "core/session_individualview.html")   
+        individual_session = session.objects.get(id=id) 
+        print(individual_session)
+        return render(request, "core/session_individualview.html", {"session":individual_session})   
     else:
         messages.success(request, "Please login first")
         return redirect("staff_login")
@@ -137,11 +224,26 @@ def session_individual_view (request):
 
 def patient_view (request,id):
     if request.user.is_authenticated:
+        
+        appointment = Appointment.objects.filter(patient__user__id=id)  
+       
 
-        appointment = Appointment.objects.filter(patient__user__id=id)    
         print(appointment)
         patient=PatientProfile.objects.get(user__id=id)
         sessions=session.objects.filter(patient__user__id=id)
+        a=Paginator(appointment,6)  
+        s=Paginator(sessions,6)  
+        page_number=request.GET.get('page')#get current page
+        try:
+                appointment=a.get_page(page_number)#gets and returns current page
+                sessions=s.get_page(page_number)#gets and returns current page
+   
+        except PageNotAnInteger:
+                appointment=a.page(1)#if pnumber isnt int assign to firstpaage
+                sessions=s.page(1)
+        except EmptyPage:
+                appointment=a.page(a.num_pages)
+                sessions=s.page(s.num_pages)
         return render(request, "core/patient_view.html", {"patient":patient,'appointments':appointment,'sessions':sessions})
     else:
         messages.success(request, "Please login first")
@@ -151,10 +253,11 @@ def staff_view (request,id):
     if request.user.is_authenticated:
 
         appointments = Appointment.objects.filter(doctor__user__id=id)    
-        patient=PatientProfile.objects.get(user__id=id)
+        shifts = Shift.objects.filter(staff__user__id=id)    
+        staff=PatientProfile.objects.get(user__id=id)
 
         
-        return render(request, "core/staff_view.html", {"patient":patient,'appointments':appointments})
+        return render(request, "core/staff_view.html", {"staff":staff,"shifts":shifts,'appointments':appointments})
     else:
         messages.success(request, "Please login first")
         return redirect("staff_login")
@@ -166,7 +269,8 @@ def patient_search(request):
             patients = PatientProfile.objects.filter(
                 Q(user__first_name__icontains=searched) 
             )
-            if patients.exists():
+            if patients:
+                print("noo")
                 return render(request, "core/patient_search.html", {'searched': patients, 'query': searched})
             else:
                 messages.error(request, "No patients match your search query")
@@ -222,6 +326,31 @@ def appointment_view(request):
     if request.user.is_authenticated:
 
         appointments=Appointment.objects.all()
+        current_date = timezone.now().date()
+        for appointment in appointments:
+            if appointment.date < current_date:
+                appointment.status="COMPLETED"
+        if request.method == "POST":
+            search_query = request.POST.get('search', '')
+            if search_query:
+                appointments = appointments.filter(
+                    Q(patient__user__id__icontains=search_query) |
+                    Q(patient__user__first_name__icontains=search_query) |
+                    Q(patient__user__last_name__icontains=search_query)|
+                      Q(doctor__user__first_name__icontains=search_query)|
+                    Q(doctor__user__last_name__icontains=search_query)
+
+                      
+                )
+        p=Paginator(appointments,6)
+        page_number=request.GET.get('page')
+        try:
+            appointments=p.get_page(page_number)
+        except PageNotAnInteger:
+            appointments=p.page(1)#if pnumber isnt int assign to firstpaage
+        except EmptyPage:
+            appointments=p.page(p.num_pages)
+    
         return render(request, "core/view_appointment.html",{"appointments":appointments})
     else:
         messages.success(request, "Please login first")
@@ -269,14 +398,7 @@ def appointment_edit (request,id):
             messages.success(request, "Please login first")
             return redirect("staff_login")
     
-def patient_management(request):
-    if request.user.is_authenticated:
-        patients=PatientProfile.objects.filter(is_staff=False)
-        return render(request, "core/patient_management.html", {"patients":patients})
-    else:
-        messages.success(request, "Please login first")
-        return redirect("staff_login")
-    
+
 def session_create(request):
     if request.user.is_authenticated:
 
@@ -330,9 +452,17 @@ def search_patients(request):
 def session_view (request):
     if request.user.is_authenticated:
 
-        sessions=session.objects.all()
-
-        return render(request, "core/session_view.html") 
+        sessions=session.objects.all().order_by('-time')
+        p=Paginator(sessions,6)
+        page_number=request.GET.get('page')
+        try:
+            sessions=p.get_page(page_number)
+        except PageNotAnInteger:
+            sessions=p.page(1)#if pnumber isnt int assign to firstpaage
+        except EmptyPage:
+            sessions=p.page(p.num_pages)
+        
+        return render(request, "core/session_view.html", {"sessions":sessions}) 
     else:
             messages.success(request, "Please login first")
             return redirect("staff_login")
@@ -365,6 +495,19 @@ def shift_view(request):
     if request.user.is_authenticated:
 
             shifts=Shift.objects.all()
+            current_date = timezone.now().date()
+            for shift in shifts:
+                if shift.date < current_date:
+                    shift.status="COMPLETED"
+              
+            if request.method == "POST":
+                search_query = request.POST.get('search', '')
+                if search_query:
+                    shifts = shifts.filter(
+                        Q(staff__user__id__icontains=search_query) |
+                        Q(staff__user__first_name__icontains=search_query) |
+                        Q(date__icontains=search_query)
+                    )
             p=Paginator(shifts,10)
             page_number=request.GET.get('page')#get current page
             try:

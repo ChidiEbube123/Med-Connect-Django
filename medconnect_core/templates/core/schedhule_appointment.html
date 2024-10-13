@@ -16,16 +16,18 @@
             background-color: var(--color-background);
             min-height: 100vh;
             display: flex;
-            align-items: center;
+          
             justify-content: center;
-            padding: 1rem;
             font-family: sans-serif;
+              flex-direction: column;
         }
 
         .container {
             width: 100%;
-            max-width: 28rem;
-            margin-bottom: 2.5rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 1rem;
         }
 
         h1 {
@@ -87,14 +89,17 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
         }
+        .intro {
+            color:#3498db;
+        }
     </style>
 </head>
 
 <body>
-    {% include "core/nav.html" %}
+    <div class="thing">{% include "core/nav.html" %}</div>
     
     <div class="container">
-        <h1>Create Appointment</h1>
+        <h1 class="intro">Create Appointment</h1>
         <form id="appointmentForm" method="post" action="{% url "schedhule_appointment" %}">
             {% csrf_token %}
             {% for field in form %}
@@ -108,7 +113,7 @@
             
             <div class="button-container">
                 <button type="submit">
-                    Book Appointment
+                   Schedhule
                 </button>
             </div>
         </form>

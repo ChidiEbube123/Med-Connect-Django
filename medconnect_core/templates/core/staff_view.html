@@ -143,22 +143,16 @@
                 <div class="grid">
                     <div class="space-y-4">
                         <h3>Personal Details</h3>
-                        <p><span class="font-semibold">Name:</span> {{patient.user.first_name}} {{patient.user.last_name}}</p>
-                        <p><span class="font-semibold">Date of Birth:</span> {{patient.date_of_birth}}</p>
-                        <p><span class="font-semibold">Gender:</span> {{patient.gender}}</p>
-                        <p><span class="font-semibold">Contact:</span> {{patient.user.email}} | {{patient.phone_number}}</p>
-                        <p><span class="font-semibold">Address:</span> {{patient.address}}</p>
+                        <p><span class="font-semibold">Name:</span> {{staff.user.first_name}} {{staff.user.last_name}}</p>
+                        <p><span class="font-semibold">Date of Birth:</span> {{staff.date_of_birth}}</p>
+                        <p><span class="font-semibold">Gender:</span> {{staff.gender}}</p>
+                        <p><span class="font-semibold">Contact:</span> {{staff.user.email}} | {{staff.phone_number}}</p>
+                        <p><span class="font-semibold">Address:</span> {{staff.address}}</p>
                     </div>
-                    <div class="space-y-4">
-                        <h3>Medical History</h3>
-                        <ul class="list-disc">
-                            <li>{{patient.medical_history}}</li>
-                        </ul>
-                    </div>
+                   
                 </div>
-                
                 <div class="mt-8">
-                    <h3>Recent Shifts</h3>
+                    <h3>Recent Appointments</h3>
                     <div style="overflow-x: auto;">
                         <table>
                             <thead>
@@ -182,10 +176,33 @@
                         </table>
                     </div>
                 </div>
-                
-                <div class="mt-8 flex justify-end">
-                    <a href="{% url "patient_edit" patient.user.id%}" class="button"></a>
+                <div class="mt-8">
+                    <h3>Recent Shifts</h3>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time Slot</th>
+                                 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for shift in shifts %}
+                                <tr>
+                                    <td>{{shift.date}}</td>
+                                    <td>{{shift.time_slot}}</td>
+                                
+                                </tr>
+                                {% endfor %}
+                                
+                              
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+                
+             
             </div>
         </div>
     </main>

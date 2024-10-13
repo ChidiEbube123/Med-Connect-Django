@@ -141,23 +141,51 @@
             background-color: #cff4fc;
             color: #055160;
         }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .pagination-info {
+            color: #4b5563;
+        }
+        
+        .pagination-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .pagination-button {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-button:hover {
+            background-color: #2563eb;
+        }
+        
+        .intro {
+            color:#3498db;
+        }
     </style>
 </head>
 <body>
     {% include "core/nav.html" %}
     <main class="container">
-        {% if messages %}
-        {% for message in messages %}
-            <div class="message {{ message.tags }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-        <h2>Patient Management</h2>
+        
+        <h2 class="intro">Patient Management</h2>
         <div class="flex-end">
             <a href="{% url 'patient_signup' %}" class="button button-blue">Add New Patient</a>
         </div>
-        <form class="search-form" action="{% url 'patient_search' %}" method="post">
+        <form class="search-form"  method="post">
             {% csrf_token %}
             <input type="text" id="search" name="search" placeholder="Enter patient name or ID" class="search-input">
             <button type="submit" class="search-button">Search</button>
@@ -175,7 +203,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for patient in patients %}
+                {% for patient in patients.object_list %}
                 <tr>
                     <td>{{patient.user.id}}</td>
                     <td>{{patient.user.first_name}} {{patient.user.last_name}}</td>
@@ -192,6 +220,20 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="pagination">
+            <div class="pagination-info">
+                <span>Showing entry {{patients.number}} </span>
+            </div>
+            <div class="pagination-buttons">{% if patients.has_previous %}
+                <button class="pagination-button" disabled> 
+                    <a href="?page={{patients.previous_page_number}}"> Previous </a>
+                    </button>{% endif %}
+                        {% if patients.has_next %}
+                <button class="pagination-button" disabled> 
+                    <a href="?page={{patients.next_page_number}}">Next</a>
+                   </button> {% endif %}
+            </div>
+        </div>
     </main>
     
     <footer>

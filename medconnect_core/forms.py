@@ -104,68 +104,126 @@ class PatientSignUpForm(UserCreationForm):
         model=User
         fields=('username','first_name', 'last_name','email')
 
+class StaffSignUpForm(UserCreationForm):
+    username = forms.CharField(
+        label='Username',
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-field',
+            "placeholder":"Staff's Username"
+        }),
+    )
+    first_name = forms.CharField(
+        label='First Name',
+        required=True,
+        widget=forms.TextInput(attrs={
+          'class': 'form-field',
+            "placeholder":"Staff's First Name"
+        }),
+    )
+    last_name = forms.CharField(
+        label='Other Names',
+        required=True,
+        widget=forms.TextInput(attrs={
+       'class': 'form-field',
+            "placeholder":"Staff's Last Name"
+        }),
+    )
+    email = forms.EmailField(
+        label='Email Address',
+        required=True,
+        widget=forms.EmailInput(attrs={
+         'class': 'form-field',
+         "placeholder":"Staff's Email Address"
+
+        }),
+    )
+    
+    password1 = forms.CharField(
+        label='Password',
+        required=True,
+        widget=forms.PasswordInput(attrs={
+        'class': 'form-field',
+                    "placeholder":"Example aqw_135"
+
+        }),
+    )
+    password2 = forms.CharField(
+        label='Confirm Password',
+        required=True,
+        widget=forms.PasswordInput(attrs={
+          'class': 'form-field',
+            "placeholder":"Confirm Password"
+
+        }),
+    )
+    usable_password = None
+
+    class Meta:
+        model=User
+        fields=('username','first_name', 'last_name','email')
 
 class PatientProfileForm(forms.ModelForm):
-    date_of_birth = forms.DateField(
+    date_of_birth = forms.DateField(required=False,
    
     widget=forms.DateInput(attrs={'class': 'form-field', 'placeholder': 'YYYY-MM-DD'})
 )
 
-    gender = forms.ChoiceField(
+    gender = forms.ChoiceField(required=False,
         choices=[('Male', 'Male'), ('Female', 'Female')],
         widget=forms.Select(attrs={'class': 'form-field'})
     )
 
-    blood_type = forms.ChoiceField(
+    blood_type = forms.ChoiceField(required=False,
         choices=[('AA', 'AA'), ('AS', 'AS'), ('SS', 'SS')],
         widget=forms.Select(attrs={'class': 'form-field'})
     )
 
-    phone_number = forms.CharField(
+    phone_number = forms.CharField(required=False,
         widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Patient's Phone Number"})
     )
 
-    address = forms.CharField(
+    address = forms.CharField(required=False,
         widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Patient's Address"})
     )
 
-    emergency_contact_name = forms.CharField(
+    emergency_contact_name = forms.CharField(required=False,
         widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Emergency Contact Name"})
     )
 
-    emergency_contact_number = forms.CharField(
+    emergency_contact_number = forms.CharField(required=False,
         widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Emergency Contact Number"})
     )
 
-    allergies = forms.CharField(
+    allergies = forms.CharField(required=False,
         widget=forms.Textarea(attrs={'class': 'form-field', "placeholder": "Known Allergies"})
     )
 
-    medical_history = forms.CharField(
+    medical_history = forms.CharField(required=False,
         widget=forms.Textarea(attrs={'class': 'form-field', "placeholder": "Patient's Medical History"})
     )
 
-    current_medications = forms.CharField(
+    current_medications = forms.CharField(required=False,
         widget=forms.Textarea(attrs={'class': 'form-field', "placeholder": "Current Medications"})
     )
 
-    insurance_provider = forms.CharField(
+    insurance_provider = forms.CharField(required=False,
         widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Insurance Provider"})
     )
 
-    insurance_policy_number = forms.CharField(
+    insurance_policy_number = forms.CharField(required=False,
         widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Insurance Policy Number"})
     )
 
-    additional_information = forms.CharField(
+    additional_information = forms.CharField(required=False,
         widget=forms.Textarea(attrs={'class': 'form-field', "placeholder": "Additional Information"})
     )
 
-    next_of_kin = forms.CharField(
+    next_of_kin = forms.CharField(required=False,
         widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Next of Kin"})
     )
 
-    marital_status = forms.ChoiceField(
+    marital_status = forms.ChoiceField(required=False,
         choices=[('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced')],
         widget=forms.Select(attrs={'class': 'form-field'})
     )
@@ -175,11 +233,11 @@ class PatientProfileForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Patient's Occupation"})
     )
 
-    smoking_status = forms.CharField(
+    smoking_status = forms.CharField(required=False,
         widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Smoking Status"})
     )
 
-    alcohol_consumption = forms.CharField(
+    alcohol_consumption = forms.CharField(required=False,
         widget=forms.TextInput(attrs={'class': 'form-field', "placeholder": "Alcohol Consumption"})
     )
     class Meta:
@@ -215,9 +273,10 @@ class StaffProfileForm(forms.ModelForm):
     #is_staff=forms.BooleanField(required=False,widget=forms.CheckboxInput( attrs={'checked':'checked'}))
     status=forms.ChoiceField(required=False,label="Status", choices=[  
           ('Doctor', "Doctor"),
+          ('Admin', "Admin",),
         ('Nurse', "Nurse"),
              ] , widget=forms.Select(attrs={
-            'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+            'class': 'form-field'
         }))
     
     class Meta:
@@ -229,7 +288,7 @@ class StaffProfileForm(forms.ModelForm):
     'phone_number',
     'address',
     'additional_information', 
-    'is_staff',
+   'is_staff',
     'status',
 
 )
@@ -299,8 +358,12 @@ class PatientSearchForm(forms.Form):
 class SessionForm(forms.ModelForm):
     class Meta:
         model = session
-        fields = ['medication', 'dosage', 'instructions','patient','doctor']#
+        fields = ['notes','medication', 'dosage', 'instructions','patient','doctor', 'time']#
         widgets = {
+             'notes': forms.Textarea(attrs={
+                'class': 'w-full p-2 border border-gray-300 rounded h-32 resize-none',
+                'rows': 4
+            }),
             'medication': forms.Textarea(attrs={
                 'class': 'w-full p-2 border border-gray-300 rounded h-32 resize-none',
                 'rows': 4

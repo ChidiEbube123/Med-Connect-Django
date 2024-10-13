@@ -109,6 +109,36 @@
         tbody tr {
             border-bottom: 1px solid #e5e7eb;
         }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .pagination-info {
+            color: #4b5563;
+        }
+        
+        .pagination-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .pagination-button {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-button:hover {
+            background-color: #2563eb;
+        }
         footer {
             background-color: #2563eb;
             color: white;
@@ -133,12 +163,11 @@
         <div class="flex-end">
             <a href="{% url 'staff_signup' %}" class="button button-blue">Add New Staff</a>
         </div>
-        <form class="search-form" action="{% url 'patient_search' %}" method="post">
+        <form class="search-form"  method="post">
             {% csrf_token %}
             <input type="text" id="search" name="search" placeholder="Enter patient name or ID" class="search-input">
             <button type="submit" class="search-button">Search</button>
         </form>
-        
         <table>
             <thead>
                 <tr>
@@ -151,15 +180,15 @@
                 </tr>
             </thead>
             <tbody>
-                {% for patient in patients %}
+                {% for staff in staff.object_list %}
                 <tr>
-                    <td>{{patient.user.id}}</td>
-                    <td>{{patient.user.first_name}} {{patient.user.last_name}}</td>
-                    <td>{{patient.status}}</td>
-                    <td>{{patient.gender}}</td>
-                    <td>{{patient.phone_number}}</td>
+                    <td>{{staff.user.id}}</td>
+                    <td>{{staff.user.first_name}} {{staff.user.last_name}}</td>
+                    <td>{{staff.status}}</td>
+                    <td>{{staff.gender}}</td>
+                    <td>{{staff.phone_number}}</td>
                     <td>
-                        <a href="{% url 'staff_view' patient.user.id %}" class="button button-green">View</a>
+                        <a href="{% url 'staff_view' staff.user.id %}" class="button button-green">View</a>
  
                        
                     </td>
@@ -167,6 +196,20 @@
                  {% endfor %}
             </tbody>
         </table>
+        <div class="pagination">
+            <div class="pagination-info">
+                <span>Showing entry {{staff.number}} </span>
+            </div>
+            <div class="pagination-buttons">{% if staff.has_previous %}
+                <button class="pagination-button" disabled> 
+                    <a href="?page={{staff.previous_page_number}}"> Previous </a>
+                    </button>{% endif %}
+                        {% if staff.has_next %}
+                <button class="pagination-button" disabled> 
+                    <a href="?page={{staff.next_page_number}}">Next</a>
+                   </button> {% endif %}
+            </div>
+        </div>
     </main>
     
     <footer>

@@ -4,42 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Patient Records</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base styling */
+        .form-field {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 0.25rem;
+        }
+        body {
+            background-color: white;
+            color: #4a4a4a; /* Equivalent to Tailwind's gray-800 */
+            font-family: sans-serif;
+        }
+        header {
+            background-color: #2563eb; /* Equivalent to Tailwind's blue-600 */
+            color: white;
+            padding: 1rem;
+        }
+        h1 {
+            font-size: 1.5rem; /* Equivalent to Tailwind's text-2xl */
+            font-weight: bold;
+        }
+        .container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        main {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 2rem;
+            padding: 1rem;
+        }
+        form {
+            max-width: 32rem; /* Equivalent to Tailwind's max-w-lg */
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 10rem;
+        }
+        h2 {
+            font-size: 1.5rem; /* Equivalent to Tailwind's text-2xl */
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #2c3e50; /* Equivalent to secondary color */
+        }
+        button {
+            background-color: #2563eb; /* Equivalent to Tailwind's blue-600 */
+            color: white;
+            padding: 0.5rem 1rem; /* Equivalent to Tailwind's px-4 py-2 */
+            border-radius: 0.25rem; /* Equivalent to Tailwind's rounded */
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1d4ed8; /* Equivalent to Tailwind's blue-700 */
+        }
+        footer {
+            background-color: #2563eb; /* Equivalent to Tailwind's blue-600 */
+            color: white;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        footer p {
+            text-align: center;
+        }
+    </style>
 </head>
-<body class="bg-white text-gray-800 font-sans">
-    <header class="bg-blue-600 text-white p-4">
-        <div class="container mx-auto">
-            <h1 class="text-2xl font-bold">MedConnect</h1>
-        </div>
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            secondary: '#2c3e50',
-                            secondary: '#3498db',
-                            accent: '#e74c3c',
-                            background: '#ecf0f1',
-                        }
-                    }
-                }
-            }
-        </script>
-    </header>
+<body>
+    
     {% include "core/nav.html" %}
 
-    <main class="container mx-auto mt-8 p-4">
-      
-        <form class="max-w-lg mx-auto" action="{% url "patient_profile" %}" method="post">
-            <h2 class="text-2xl font-semibold mt-40 mb-6 text-secondary">Patient Records </h2>
-          {% csrf_token %}
-          {{form}}
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Sign Up</button>
+    <main>
+        <form action="{% url "patient_profile" %}" method="post">
+            <h2>Patient Records</h2>
+            {% csrf_token %}
+            {{form}}
+            <button type="submit">Sign Up</button>
         </form>
     </main>
 
-    <footer class="bg-blue-600 text-white p-4 mt-8">
-        <div class="container mx-auto text-center">
+    <footer>
+        <div class="container">
             <p>&copy; 2024 Hospital Management System. All rights reserved.</p>
         </div>
     </footer>

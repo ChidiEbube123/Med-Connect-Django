@@ -77,7 +77,26 @@
         button:hover {
             background-color: #1d4ed8;
         }
+        .message {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.25rem;
+        }
         
+        .message.success {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+
+        .message.info {
+            background-color: #cff4fc;
+            color: #055160;
+        }
         footer {
             background-color: #2563eb;
             color: white;
@@ -88,6 +107,9 @@
         footer .container {
             text-align: center;
         }
+        .intro {
+            color:#3498db;
+        }
     </style>
 </head>
 <body>
@@ -96,8 +118,15 @@
     {% include "core/nav.html" %}
     
     <main class="container">
-        <form action="{% url "patient_profile" %}" method="post">
-            <h2>Staff Records</h2>
+        {% if messages %}
+        {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+        <form action="{% url "staff_profile" %}" method="post">
+            <h2 class="intro">Staff Profile</h2>
             {% csrf_token %}
             {{form}}
             <button type="submit">Sign Up</button>

@@ -6,6 +6,9 @@
     <title>Previous Sessions - TeleMed</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     <style>
+        .intro {
+            color:#3498db;
+        }
         body {
             background-color: #ecf0f1;
             min-height: 100vh;
@@ -104,13 +107,43 @@
             margin-top: 1rem;
             text-align: center;
         }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .pagination-info {
+            color: #4b5563;
+        }
+        
+        .pagination-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .pagination-button {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-button:hover {
+            background-color: #2563eb;
+        }
     </style>
 </head>
 <body>
   
     {% include "core/nav.html" %}
     <main class="container">
-        <h2>Previous Sessions</h2>
+        <h2 class="intro">Previous Sessions</h2>
         <div class="card">
             <table>
                 <thead>
@@ -123,29 +156,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                 {% for session in sessions %}
+                 {% for session in sessions.object_list %}
                  <tr>
-                    <td>Dr. Emily Johnson</td>
-                    <td>John Doe</td>
-                    <td>May 15, 2024</td>
-                    <td>10:00 AM - 10:30 AM</td>
+                    <td> Dr {{session.doctor}}</td>
+                    <td>{{session.patient.status}} {{session.patient}}</td>
+                    <td>{{session.date}}</td>
+                    <td>{{session.time}}</td>
                     <td>
-                        <a href="{% url "session_individual_view" %}">View Details</a>
+                        <a href="{% url "session_individual_view" session.id%}">View Details</a>
                     </td>
                 </tr>
                  {% endfor %}
-                    <tr>
-                        <td>Dr. Mark Smith</td>
-                        <td>Jane Doe</td>
-                        <td>April 12, 2024</td>
-                        <td>2:00 PM - 2:45 PM</td>
-                        <td>
-                            <a href="{% url "session_individual_view" %}">View Details</a>
-                        </td>
-                    </tr>
+                 
                     <!-- Add more rows as needed -->
                 </tbody>
+               
             </table>
+             <div class="pagination">
+                    <div class="pagination-info">
+                        <span>Showing entry {{sessions.number}} </span>
+                    </div>
+                    <div class="pagination-buttons">{% if sessions.has_previous %}
+                        <button class="pagination-button" disabled> 
+                            <a href="?page={{sessions.previous_page_number}}"> Previous </a>
+                            </button>{% endif %}
+                                {% if sessions.has_next %}
+                        <button class="pagination-button" disabled> 
+                            <a href="?page={{sessions.next_page_number}}">Next</a>
+                           </button> {% endif %}
+                    </div>
+                </div>
         </div>
         <div class="button-container">
             <a href="{% url "session_create" %}" class="button">

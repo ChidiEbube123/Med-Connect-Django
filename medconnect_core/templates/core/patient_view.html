@@ -5,41 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient View - Hospital Management System</title>
     <style>
+        :root {
+            --primary-color: #0047AB;
+            --secondary-color: #4682B4;
+            --background-color: #F0F8FF;
+            --text-color: #333;
+            --border-color: #D1E8E2;
+        }
+        
         body {
-            background-color: #f3f4f6;
-            font-family: sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
             margin: 0;
             padding: 0;
         }
         
         .container {
             max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 0 1rem;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
         }
         
         main {
-            padding: 2rem 1rem;
+            padding: 2rem 0;
         }
         
         .card {
             background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
         }
         
         .card-header {
-            background-color: #3b82f6;
+            background-color: var(--secondary-color);
             color: white;
             padding: 1rem 1.5rem;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
         }
         
         .card-header h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
             margin: 0;
+            font-size: 1.5rem;
         }
         
         .card-body {
@@ -48,7 +70,7 @@
         
         .grid {
             display: grid;
-            gap: 1.5rem;
+            gap: 2rem;
         }
         
         @media (min-width: 768px) {
@@ -57,82 +79,107 @@
             }
         }
         
-        .space-y-4 > * + * {
-            margin-top: 1rem;
-        }
-        
         h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #2563eb;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
         }
         
-        .font-semibold {
-            font-weight: 600;
+        .info-group {
+            margin-bottom: 1rem;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: var(--secondary-color);
         }
         
         ul.list-disc {
-            list-style-type: disc;
             padding-left: 1.5rem;
-        }
-        
-        .mt-8 {
-            margin-top: 2rem;
         }
         
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 1rem;
         }
         
         th, td {
-            border: 1px solid #e5e7eb;
-            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
             text-align: left;
         }
         
-        thead tr {
-            background-color: #dbeafe;
+        th {
+            background-color: var(--secondary-color);
+            color: white;
+            font-weight: bold;
         }
         
         tbody tr:nth-child(even) {
-            background-color: #f9fafb;
-        }
-        
-        .flex {
-            display: flex;
-        }
-        
-        .justify-end {
-            justify-content: flex-end;
+            background-color: #f8f9fa;
         }
         
         .button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .button:hover {
+            background-color: var(--secondary-color);
+        }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .pagination-info {
+            color: #4b5563;
+        }
+        
+        .pagination-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .pagination-button {
             background-color: #3b82f6;
             color: white;
             font-weight: 600;
             padding: 0.5rem 1rem;
             border-radius: 0.25rem;
-            text-decoration: none;
+            border: none;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
         
-        .button:hover {
+        .pagination-button:hover {
             background-color: #2563eb;
-            transform: scale(1.05);
         }
         
+       
+        
         footer {
-            background-color: #2563eb;
+            background-color: var(--primary-color);
             color: white;
-            margin-top: 2rem;
-            padding: 1.5rem 1rem;
             text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
         }
     </style>
 </head>
 <body>
     {% include "core/nav.html" %}
+
 
     <main class="container">
         <div class="card">
@@ -141,71 +188,126 @@
             </div>
             <div class="card-body">
                 <div class="grid">
-                    <div class="space-y-4">
+                    <div>
                         <h3>Personal Details</h3>
-                        <p><span class="font-semibold">Name:</span> {{patient.user.first_name}} {{patient.user.last_name}}</p>
-                        <p><span class="font-semibold">Date of Birth:</span> {{patient.date_of_birth}}</p>
-                        <p><span class="font-semibold">Gender:</span> {{patient.gender}}</p>
-                        <p><span class="font-semibold">Contact:</span> {{patient.user.email}} | {{patient.phone_number}}</p>
-                        <p><span class="font-semibold">Address:</span> {{patient.address}}</p>
+                        <div class="info-group">
+                            <span class="info-label">Name:</span>
+                            <span>{{patient.user.first_name}} {{patient.user.last_name}}</span>
+                        </div>
+                        <div class="info-group">
+                            <span class="info-label">Date of Birth:</span>
+                            <span>{{patient.date_of_birth}}</span>
+                        </div>
+                        <div class="info-group">
+                            <span class="info-label">Gender:</span>
+                            <span>{{patient.gender}}</span>
+                        </div>
+                        <div class="info-group">
+                            <span class="info-label">Contact:</span>
+                            <span>{{patient.user.email}} | {{patient.phone_number}}</span>
+                        </div>
+                        <div class="info-group">
+                            <span class="info-label">Address:</span>
+                            <span>{{patient.address}}</span>
+                        </div>
                     </div>
-                    <div class="space-y-4">
-                        <h3>Medical History</h3>
+                  
+                    <div>
+                        <h3>Medical History</h3> 
+                         {% if  patient.medical_history %}
                         <ul class="list-disc">
                             <li>{{patient.medical_history}}</li>
                         </ul>
-                    </div>
+                         {% else %} <div>No medical history yet...</div>
+                   {% endif %}
+                        </div>
+                   
+                       
+                   
                 </div>
                 
-                <div class="mt-8">
-                    <h3>Recent Appointments</h3>
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Doctor</th>
-                                    <th>Purpose</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                             {% for appointment in appointments %}
-                             <tr>
+                <h3>Recent Appointments</h3>
+                <div style="overflow-x: auto;">
+                    {% if appointments %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Doctor</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments %}
+                            <tr>
                                 <td>{{appointment.date}}</td>
                                 <td>{{appointment.doctor}}</td>
                                 <td>{{appointment.purpose}}</td>
                             </tr>
-                          
-                             {% endfor %}
-                            </tbody>
-                        </table>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <div class="pagination-info">
+                            <span>Showing entry {{appointments.number}} </span>
+                        </div>
+                        <div class="pagination-buttons">{% if appointments.has_previous %}
+                            <button class="pagination-button" disabled> 
+                                <a href="?page={{appointments.previous_page_number}}"> Previous </a>
+                                </button>{% endif %}
+                                   <span>{{appointments.number}}</span>{% if appointments.has_next %}
+                            <button class="pagination-button" disabled> 
+                                <a href="?page={{appointments.next_page_number}}">Next</a>
+                               </button> {% endif %}
+                        </div>
                     </div>
-                    <h3>Recent Sessions</h3>
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Doctor</th>
-                                    <th>Purpose</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                             {% for session in sessions %}
-                             <tr>mm
-                                <td>{{appointment.date}}</td>
-                                <td>{{appointment.doctor}}</td>
-                                <td>{{appointment.purpose}}</td>
+                    {% else %}
+                    <div>No appointments yet..</div>
+                    {% endif %}
+                </div>
+
+                <h3>Recent Sessions</h3>
+                <div style="overflow-x: auto;">
+                    {% if sessions %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Doctor</th>
+                                <th>Purpose</th>
                             </tr>
-                          
-                             {% endfor %}
-                            </tbody>
-                        </table>
+                        </thead>
+                        <tbody>
+                            {% for session in sessions %}
+                            <tr>
+                                <td>{{session.date}}</td>
+                                <td>{{session.doctor}}</td>
+                                <td>{{session.purpose}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <div class="pagination-info">
+                            <span>Showing entry {{sessions.number}} </span>
+                        </div>
+                        <div class="pagination-buttons">{% if sessions.has_previous %}
+                            <button class="pagination-button" disabled> 
+                                <a href="?page={{sessions.previous_page_number}}"> Previous </a>
+                                </button>{% endif %}
+                                   <span>{{shifts.number}}</span>{% if sessions.has_next %}
+                            <button class="pagination-button" disabled> 
+                                <a href="?page={{sessions.next_page_number}}">Next</a>
+                               </button> {% endif %}
+                        </div>
                     </div>
+                    {% else %}
+                    <div>No sessions yet..</div>
+                    {% endif %}
                 </div>
                 
-                <div class="mt-8 flex justify-end">
-                    <a href="{% url "patient_edit" patient.user.id%}" class="button">Edit Patient Information</a>
+                <div style="text-align: right; margin-top: 2rem;">
+                    <a href="{% url 'patient_edit' patient.user.id %}" class="button">Edit Patient Information</a>
                 </div>
             </div>
         </div>

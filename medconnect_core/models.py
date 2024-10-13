@@ -27,9 +27,10 @@ class PatientProfile(models.Model):
     status= models.CharField(null=True, max_length=100,choices=[
         ('Patient', "Patient")  ,
           ('Doctor', "Doctor"),
-        ('Nurse', "Nurse"),
+          ('Admin', "Admin"),
+        ('Nurse', "Nurse")
              
-    ], blank=True)
+    ],default="Nurse", blank=True)
     
 
     def __str__(self):
@@ -41,7 +42,7 @@ def create_profile(sender, instance, created, **kwargs):
 #automte it
 post_save.connect(create_profile, sender=User)
 class Appointment(models.Model):
-        patient = models.ForeignKey(PatientProfile,limit_choices_to={'is_staff':True}, on_delete=models.CASCADE, null=True)
+        patient = models.ForeignKey(PatientProfile,limit_choices_to={'is_staff':False}, on_delete=models.CASCADE, null=True)
         date=models.DateField(default=datetime.datetime.today)
         time = models.TimeField(default=datetime.datetime.today)
         purpose = models.TextField(max_length=100, null=True)
@@ -81,11 +82,14 @@ class Shift(models.Model):
 
 
 class session(models.Model):
-    doctor = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
-    patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE, null=True, blank=True)
+    doctor = models.ForeignKey(PatientProfile,limit_choices_to={'is_staff':True}, on_delete=models.CASCADE,null=True)
+    patient = models.ForeignKey(PatientProfile,related_name="patient",limit_choices_to={'is_staff':False}, on_delete=models.CASCADE, null=True, blank=True)
+    notes=models.TextField(null=True)
     medication = models.TextField()
     dosage = models.CharField(max_length=100)
     instructions = models.TextField()
+    date=date=models.DateField(default=datetime.datetime.today)
+    time=models.ForeignKey(Time_Slot, on_delete=models.CASCADE,null=True)
     # Add other fields as needed
 
     def __str__(self):

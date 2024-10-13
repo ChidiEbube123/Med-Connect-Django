@@ -75,19 +75,32 @@
             background-color: #2563eb;
         }
         
+        .search-form {
+            max-width: 32rem;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 2rem;
+            display: flex;
+        }
         .search-input {
-            width: 100%;
-            padding: 0.5rem 1rem;
-            margin-bottom: 1rem;
+            flex-grow: 1;
+            padding: 0.5rem;
             border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
+            border-top-left-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
         }
-        
-        .search-input:focus {
-            outline: none;
-            ring: 2px solid #3b82f6;
+        .search-button {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-top-right-radius: 0.25rem;
+            border-bottom-right-radius: 0.25rem;
+            cursor: pointer;
         }
-        
+        .search-button:hover {
+            background-color: #1d4ed8;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -161,11 +174,6 @@
             background-color: #2563eb;
         }
         
-        .pagination-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
         footer {
             background-color: #2563eb;
             color: white;
@@ -188,7 +196,11 @@
             </div>
             <div class="card-body">
                 <div>
-                    <input type="text" placeholder="Search appointments..." class="search-input">
+                    <form class="search-form"  method="post">
+                        {% csrf_token %}
+                        <input type="text" id="search" name="search" placeholder="Enter patient name or ID" class="search-input">
+                        <button type="submit" class="search-button">Search</button>
+                    </form>                    
                 </div>
                 <div style="overflow-x: auto;">
                     <table>
@@ -204,7 +216,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                           {% for appointment in appointments  %}
+                           {% for appointment in appointments.object_list  %}
                            <tr>
                             <td>{{appointment.date}}</td>
                             <td>{{appointment.time}}</td>
@@ -222,9 +234,9 @@
                            </td>
                        {% else %}
                        <td>
-                        <a href="{% url "appointment_edit" appointment.id %}" class="action-button edit">Edit</a>
-                        <a href="{% url 'appointment_cancel' appointment.id %}" id="cancel-link" class="action-button cancel">Cancel</a>
                         <a href="{% url "appointment_complete" appointment.id %}" class="action-button complete">Mark Completed</a>
+                        <a href="{% url 'appointment_cancel' appointment.id %}" id="cancel-link" class="action-button cancel">Cancel</a>
+
                     </td>
                            {% endif %}
                         </tr>
@@ -234,11 +246,16 @@
                 </div>
                 <div class="pagination">
                     <div class="pagination-info">
-                        <span>Showing 1 to 2 of 2 entries</span>
+                        <span>Showing entry {{appointments.number}} </span>
                     </div>
-                    <div class="pagination-buttons">
-                        <button class="pagination-button" disabled>Previous</button>
-                        <button class="pagination-button" disabled>Next</button>
+                    <div class="pagination-buttons">{% if appointments.has_previous %}
+                        <button class="pagination-button" disabled> 
+                            <a href="?page={{appointments.previous_page_number}}"> Previous </a>
+                            </button>{% endif %}
+                                {% if appointments.has_next %}
+                        <button class="pagination-button" disabled> 
+                            <a href="?page={{appointments.next_page_number}}">Next</a>
+                           </button> {% endif %}
                     </div>
                 </div>
             </div>
@@ -247,7 +264,7 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 Hospital Management System. All rights reserved.</p>
+            <p>&copy; 2024 MedConnect. All rights reserved.</p>
         </div>
     </footer>
 
